@@ -1,0 +1,33 @@
+# FastF1 cache - large, regenerable, should never be committed
+data/cache/
+f1_cache/
+
+# Raw/processed data - regenerable from FastF1, keep repo light
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Reports output (regenerable) - keep folder, ignore generated figures
+reports/figures/*
+!reports/figures/.gitkeep
+
+# Secrets / env
+.env

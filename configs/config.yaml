@@ -1,0 +1,28 @@
+# Central config - single source of truth for which data this project pulls.
+# Update this as scoping confirms what's actually usable (see /notebooks/00_data_scoping.ipynb)
+
+seasons: [2023, 2024, 2025]
+
+# Populate once scoping confirms session availability per season
+session_types: ["FP1", "FP2", "FP3", "Q", "R"]
+
+cache_dir: "data/cache"
+raw_dir: "data/raw"
+processed_dir: "data/processed"
+
+# Filled in during scoping - which columns are reliably non-null per data source
+required_lap_columns:
+  - Driver
+  - LapTime
+  - LapNumber
+  - Compound
+  - TyreLife
+  - Stint
+
+required_telemetry_channels:
+  - Speed
+  - Throttle
+  - Brake
+  - nGear
+  - RPM
+  - Distance
