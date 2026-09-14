@@ -10,7 +10,9 @@ cache_dir: "data/cache"
 raw_dir: "data/raw"
 processed_dir: "data/processed"
 
-# Filled in during scoping - which columns are reliably non-null per data source
+# Confirmed via scripts/scope_inspect_*.py against 2023-2024 Monza + 2023 Sao Paulo (wet/chaotic race)
+# Schema confirmed stable across seasons 2023-2024 (identical 31 lap columns).
+
 required_lap_columns:
   - Driver
   - LapTime
@@ -18,6 +20,7 @@ required_lap_columns:
   - Compound
   - TyreLife
   - Stint
+  - IsAccurate   # MUST filter == True before pace/degradation stats - see src/data/loader.py
 
 required_telemetry_channels:
   - Speed
@@ -25,4 +28,15 @@ required_telemetry_channels:
   - Brake
   - nGear
   - RPM
-  - Distance
+  - Distance      # not raw - call .add_distance() on telemetry; needed for component 3 alignment
+
+telemetry_sampling:
+  approx_hz: 3.8
+  regular: false   # deltas range ~0.16s-0.92s - interpolate onto common distance grid before comparing drivers
+
+qualifying_source: "session.results"   # NOT session.laps - laps are unsegmented across Q1/Q2/Q3
+
+known_edge_cases:
+  - "A driver's laps can be entirely IsAccurate=False for a session (2023 Monza driver 22)"
+  - "Lap alignment can fail for specific drivers in chaotic races (2023 Sao Paulo drivers 3, 81)"
+  - "Position data can be incomplete for some drivers in wet/chaotic races"

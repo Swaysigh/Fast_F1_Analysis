@@ -3,6 +3,7 @@ Step 1: Inspect a single race session - laps, telemetry, weather.
 Run locally: python 01_inspect_session.py
 Paste the full output back into chat.
 """
+
 import fastf1
 import os
 
