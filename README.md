@@ -20,13 +20,27 @@ Data pulls must be run in an environment with unrestricted network access
 1. **Race pace & consistency** — lap time evolution per driver, raw vs.
    tyre-age-adjusted pace, lap time variance as a consistency metric.
 2. **Tyre degradation modeling** — regression-fit degradation curves
-   (lap time vs. tyre age) per compound per driver.
+   (lap time vs. tyre age) per compound per driver, with a fuel-burn
+   correction applied (FastF1 has no fuel-mass channel, so this uses a
+   standard ~0.03 sec/kg/lap approximation rather than measured data —
+   see `src/tyre/degradation.py` docstring for details and caveats).
 3. **Telemetry driving-style comparison** — distance-aligned speed/throttle/
    brake traces between two drivers on a common lap (teammate comparisons).
+   Telemetry sampling is irregular (~3.8 Hz, not fixed-rate), so both
+   drivers' traces are interpolated onto a shared distance grid before
+   comparison — see `src/telemetry/driving_style.py`.
 4. **Qualifying vs. race pace gap** — delta between qualifying rank and race
-   pace rank per driver across a season.
-5. **Strategy outcome analysis** — actual pit stop timing vs. simulated
-   undercut/overcut windows, scored retrospectively.
+   pace rank per driver, classifying "qualifying specialists" vs
+   "race-day specialists". Uses median raw race lap time by default rather
+   than tyre-adjusted pace — see `RACE_PACE_METHODOLOGY_NOTE` in
+   `src/quali_race_gap/gap_analysis.py` for the reasoning and the
+   stricter alternative.
+5. **Strategy outcome analysis** — scores the undercut/overcut mechanism
+   against a specific rival using actual pit lap and track position data.
+   This does NOT simulate a full alternative race (no traffic/safety-car
+   modeling) — it measures track-position swaps around real pit events,
+   a narrower but directly answerable question. See the scope note in
+   `src/strategy/strategy_analysis.py`.
 
 ## Project structure
 
