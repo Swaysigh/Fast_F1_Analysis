@@ -148,6 +148,19 @@ def fit_degradation_curves(
             "FuelCorrected": apply_fuel_correction,
         })
 
+    if not rows:
+        # No stint met min_stint_laps - return an empty frame with the
+        # right columns rather than letting sort_values() crash on an
+        # empty DataFrame with no columns at all (found via unit testing,
+        # not observed in real data - every real race so far has had at
+        # least one long-enough stint, but a caller filtering to a very
+        # short session or an unusual field could hit this).
+        return pd.DataFrame(columns=[
+            "Driver", "Team", "Stint", "Compound", "NumLaps", "DegSlope",
+            "Intercept", "RSquared", "PValue", "StdErr", "TyreLifeStart",
+            "TyreLifeEnd", "LowSampleWarning", "FuelCorrected",
+        ])
+
     return pd.DataFrame(rows).sort_values(["Compound", "DegSlope"])
 
 

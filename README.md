@@ -52,8 +52,7 @@ f1-driver-performance-analysis/
 │   ├── raw/                 # untouched FastF1 pulls (gitignored)
 │   ├── processed/           # cleaned/derived datasets (gitignored)
 │   └── cache/                # FastF1 cache dir (gitignored)
-├── notebooks/
-│   └── 00_data_scoping.ipynb  # data availability/quality checks — run first
+├── notebooks/                 # (empty - scoping was done via scripts/scope_inspect_*.py instead)
 ├── src/
 │   ├── data/                # FastF1 loading, caching, session fetch helpers
 │   ├── pace/                # component 1: race pace & consistency
@@ -78,8 +77,30 @@ source venv/bin/activate          # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+## Testing
+
+Two layers of testing exist, and they check different things:
+
+- `tests/` — automated pytest unit tests against small, hand-built fake
+  data with known-correct answers. Fast (well under a second), no
+  network needed, run with `pytest tests/ -v`. These are regression
+  guards for the real bugs found during development (the fuel-burn
+  confound in tyre degradation, low-sample-stint flagging, the
+  qualifying-vs-race pace exclusion rule, telemetry interpolation math)
+  — each test's docstring explains which bug it guards against.
+- `scripts/test_*.py` — manual smoke tests against real FastF1 data
+  (2024 Monza, Spa, etc.). These require network access and a human to
+  read the printed output and judge whether it looks right; this is how
+  the bugs the pytest suite now guards against were originally found.
+
 ## Status
 
-Data scoping in progress — see `notebooks/00_data_scoping.ipynb` for
-availability/completeness checks across seasons before analysis components
-are built out.
+Data scoping is complete — real 2023-2024 sessions (clean and wet/chaotic
+races, qualifying and race, multiple seasons) were inspected before any
+analysis component was written; see `scripts/scope_inspect_session.py`,
+`scope_inspect_quali_and_seasons.py`, and `scope_inspect_results.py` for
+the scripts used and their findings (schema stability, the `IsAccurate`
+flag, qualifying data living in `session.results` not `session.laps`,
+etc.), which are also summarized in each module's docstring where
+relevant (e.g. `src/data/loader.py`). All 5 core components are built and
+verified against real data.
