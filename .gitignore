@@ -25,9 +25,18 @@ env/
 .DS_Store
 Thumbs.db
 
-# Reports output (regenerable) - keep folder, ignore generated figures
+# Reports output: figures are regenerable via scripts/generate_figures.py,
+# but the 6 core README figures are committed as a fixed reference set so
+# they render inline on GitHub without anyone needing to run the scripts.
+# Anything else generated into this folder stays ignored.
 reports/figures/*
 !reports/figures/.gitkeep
+!reports/figures/01_pace_evolution_VER.png
+!reports/figures/02_consistency_ranking.png
+!reports/figures/03_degradation_HARD.png
+!reports/figures/04_speed_trace_NOR_PIA.png
+!reports/figures/05_quali_race_gap.png
+!reports/figures/06_position_swing_LEC_SAI.png
 
 # Secrets / env
 .env
